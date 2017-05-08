@@ -11,6 +11,8 @@ To run a test case use this command:
 ```
   java -cp java-cup-11b-runtime.jar:. genMain your_test_case
 ```
+**Notes:** If you are using Windows, make sure change **:** to **;** in the Makefile and the command to run test cases.
+
 ## AVSL grammar
 You must code AVSL follow a grammar listed below, otherwise the compiler will crash, it doesn't have any error handlers. The grammar contains just basic rules.
  
@@ -20,7 +22,7 @@ NUM → digit+
 letter → [a-z] | [A-Z]
 digit → [0-9]
 
-Program → Block
+Program → Blockto 
 Expr → ID | NUM | ‘(’ Expr ‘)’
 Expr → Unop Expr
 Unop → ‘-’ | '+' | '~'
