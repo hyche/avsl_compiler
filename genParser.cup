@@ -1,0 +1,97 @@
+import java_cup.runtime.*;
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
+import java.util.*;
+import java.io.*;
+
+class Parser;
+
+parser code {:
+    public String prgName;
+    public Parser(String name, java_cup.runtime.Scanner s, java_cup.runtime.SymbolFactory sf) {
+        super(s, sf);
+        prgName = name;
+    }
+:};
+
+action code {: 
+   private String prgName;
+:};
+
+//init with {: l.init(); :}
+//scan with {: return l.next_token(); :}
+
+/* Terminals (tokens returned by the scanner). */
+
+terminal         IF, THEN, WHILE, DO, BEGIN, END, READ, WRITE;
+terminal Integer PLUS, MINUS, SIGN, MULT, DIVIDE, MODULAR, ASSIGN, SEMI;
+terminal         UOP, LPAREN, RPAREN;
+terminal Integer INTEGERLITERAL;
+terminal String  IDENTIFIER;
+
+/* Non-terminals */
+non terminal Program        program;
+non terminal Stmt.ListStmt  block;
+non terminal Stmt.ListStmt  stmt_list; 
+non terminal Stmt           stmt;
+non terminal Integer        unop, binop;
+non terminal Expr           expr;
+
+/* Precedences */
+
+precedence right SEMI;
+precedence right ASSIGN;
+precedence left PLUS, MINUS, SIGN;
+precedence left MULT, DIVIDE, MODULAR;
+precedence left INTEGERLITERAL, IDENTIFIER, LPAREN;
+precedence left UOP;
+
+
+start with program;
+
+/* The grammar */
+//program ::= {: prgName=parser.prgName; sc = new java.util.Scanner(System.in); :}//st.addNewSymbolTable(prgName); :} 
+//          stmt_list:sl {: RESULT = new Program(sl, prgName, sc); :}
+//;
+program ::= //{: Program.symbolTable = new Hashtable<String, Integer>();
+            //   Program.registerTable = new Hashtable<String, Integer>(10);
+            //   Program.nextRegister = 0; :}
+            block:sl {: RESULT = new Program(sl, "a.out"); :}
+        ;
+
+block ::= BEGIN stmt_list:sl END {: RESULT = sl; :}
+      ;
+
+stmt_list ::= stmt:s {: Stmt.ListStmt sl = Stmt.liststmt(new LinkedList<Stmt>()); sl.add(s); RESULT = sl; :}
+          |   stmt_list:sl stmt:s {: sl.add(s); RESULT = sl; :}
+          ;
+
+stmt ::= IDENTIFIER:id ASSIGN expr:e SEMI {: RESULT = Stmt.assign(Expr.ident(idxleft, id, idxright), e); :}
+     |   READ IDENTIFIER:id SEMI {: RESULT = Stmt.read(Expr.ident(idxleft, id, idxright)); :}
+     |   WRITE expr:e SEMI {: System.out.println("write"); RESULT = Stmt.write(e); :}
+     |   IF expr:c THEN stmt:s {: RESULT = Stmt.ifthen(s, c); :}
+     |   WHILE expr:c DO stmt:s {: RESULT = Stmt.whileloop(s, c); :}
+     |   block:b {: RESULT = b; :}
+     ;
+
+expr ::= IDENTIFIER:id {: RESULT = Expr.ident(idxleft, id, idxright); :}
+     |   INTEGERLITERAL:i {: RESULT = Expr.intconst(i); :}
+     |   LPAREN expr:e RPAREN {: RESULT = e; :}
+     |   unop:o expr:e {: RESULT = Expr.unop(e, o); :} %prec UOP
+     |   expr:e1 MULT:o expr:e2 {: RESULT = Expr.binop(e1, o, e2); :}
+     |   expr:e1 PLUS:o expr:e2 {: RESULT = Expr.binop(e1, o, e2); :}
+     |   expr:e1 MINUS:o expr:e2 {: RESULT = Expr.binop(e1, o, e2); :}
+     |   expr:e1 DIVIDE:o expr:e2 {: RESULT = Expr.binop(e1, o, e2); :}
+     |   expr:e1 MODULAR:o expr:e2 {: RESULT = Expr.binop(e1, o, e2); :}
+     ;
+
+unop ::= MINUS {: RESULT = ParserSym.MINUS; :}
+     |   PLUS {: RESULT = ParserSym.PLUS; :}
+     |   SIGN {: RESULT = ParserSym.SIGN; :}
+     ;
+
+binop ::= MULT {: RESULT = ParserSym.MULT; :}
+      |   DIVIDE {: RESULT = ParserSym.DIVIDE; :}
+      |   MODULAR {: RESULT = ParserSym.MODULAR; :}
+      |   PLUS {: RESULT = ParserSym.PLUS; :}
+      |   MINUS {: RESULT = ParserSym.MINUS; :}
+      ;

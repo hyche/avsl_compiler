@@ -1,0 +1,14 @@
+begin 
+	begin 
+		read a; 
+	end 
+	a = 2 + 3;  
+	write a; 
+	begin 
+		read b; 
+		b = a + b; 
+	end 
+	write b; 
+	b = 100; 
+	write b; 
+end 

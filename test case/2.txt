@@ -1,0 +1,11 @@
+begin 
+	a1 = 1 * 2; 
+	a2 = -4 + 5;	
+	c1 = a1 * a2; 
+	read d; 
+	if c - d then 
+	begin 
+		write d;
+		read f; 
+	end
+end 

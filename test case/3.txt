@@ -1,0 +1,12 @@
+{ Chuong trinh tinh giai thua }
+begin
+read n; { n phai la so nguyen khong am }
+fact = 1;
+while n do
+begin
+	fact = fact * n;
+	n = n - 1;
+	write fact;
+end
+write fact;
+end
