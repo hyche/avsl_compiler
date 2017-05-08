@@ -22,7 +22,7 @@ NUM → digit+
 letter → [a-z] | [A-Z]
 digit → [0-9]
 
-Program → Blockto 
+Program → Block
 Expr → ID | NUM | ‘(’ Expr ‘)’
 Expr → Unop Expr
 Unop → ‘-’ | '+' | '~'
