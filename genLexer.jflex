@@ -2,15 +2,11 @@ import java_cup.runtime.Symbol;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java.io.*;
-/**
- *
- */
 
 %%
 
 %class Lexer
 %implements ParserSym
-//%function next_token
 %type java_cup.runtime.Symbol
 %public
 %cup
@@ -45,9 +41,6 @@ import java.io.*;
         return symbolFactory.newSymbol(name, sym, left, right, value);
     }
 
-    private void error(String message) {
-        System.out.println("error!");
-    }
 %}
 
 %eofval{
@@ -79,7 +72,6 @@ IntegerLiteral = 0+ | [1-9][0-9]*
     /* literals */
     {Identifier}    { isTranspose = 1; return symbol("identifier", IDENTIFIER, yytext()); }
     {IntegerLiteral} { return symbol("IntConst", INTEGERLITERAL, new Integer(yytext())); }
-    //\'              { string.setLength(0); yybegin(STRING); }
 
     /* separators */
     "="             { return symbol("assign", ASSIGN); }
@@ -95,23 +87,11 @@ IntegerLiteral = 0+ | [1-9][0-9]*
     "~"             { return symbol("sign", SIGN, ParserSym.SIGN); }
 
 
-    //{LineTerminator} { return symbol("lineterminate", LT, ParserSym.LT); }
     /* comments */
     {LineTerminator} { }
-    //"..."{LineTerminator}       { }
     {Comment}   { }
     {WhiteSpace} { }
 }
 
-//<STRING> {
-
-//    [^\n\r\'\\]+    { string.append( yytext() ); }
-//    \\t             { string.append('\t'); }
-//    \\n             { string.append('\n'); }
-//    \\r             { string.append('\r'); }
-//    \\\"            { string.append('\"'); }
-//    \\              { string.append('\\'); }
-//}
-
 /* error */
-[^]     { throw new Error("Illegal character |" + yytext() + "|"); }
+[^]     { throw new Error("Illegal character \"" + yytext() + "\""); }

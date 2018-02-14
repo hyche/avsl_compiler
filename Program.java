@@ -7,9 +7,10 @@ public class Program {
     public static Integer nextLabel;
     public static String fileName;
     private static Stmt.ListStmt sl;
+
     public Program(Stmt.ListStmt sl, String fileName) {
         this.sl = sl;
-        this.fileName= fileName;
+        this.fileName = fileName;
         symbolTable = new Hashtable<String, Integer>();
         registerHandler = new Stack<String>();
         nextLabel = 0;
@@ -19,7 +20,7 @@ public class Program {
         return String.format("L%d", nextLabel++);
     }
 
-    public void out() {
+    public static void out() {
         System.out.println("Running ...");
         String main = sl.toString();
         String data = "";
@@ -36,5 +37,4 @@ public class Program {
             e.printStackTrace();
         }
     }
-
 }

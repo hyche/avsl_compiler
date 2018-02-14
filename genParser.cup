@@ -13,12 +13,8 @@ parser code {:
     }
 :};
 
-action code {: 
-   private String prgName;
+action code {:
 :};
-
-//init with {: l.init(); :}
-//scan with {: return l.next_token(); :}
 
 /* Terminals (tokens returned by the scanner). */
 
@@ -31,7 +27,7 @@ terminal String  IDENTIFIER;
 /* Non-terminals */
 non terminal Program        program;
 non terminal Stmt.ListStmt  block;
-non terminal Stmt.ListStmt  stmt_list; 
+non terminal Stmt.ListStmt  stmt_list;
 non terminal Stmt           stmt;
 non terminal Integer        unop, binop;
 non terminal Expr           expr;
@@ -49,13 +45,7 @@ precedence left UOP;
 start with program;
 
 /* The grammar */
-//program ::= {: prgName=parser.prgName; sc = new java.util.Scanner(System.in); :}//st.addNewSymbolTable(prgName); :} 
-//          stmt_list:sl {: RESULT = new Program(sl, prgName, sc); :}
-//;
-program ::= //{: Program.symbolTable = new Hashtable<String, Integer>();
-            //   Program.registerTable = new Hashtable<String, Integer>(10);
-            //   Program.nextRegister = 0; :}
-            block:sl {: RESULT = new Program(sl, "a.out"); :}
+program ::= block:sl {: RESULT = new Program(sl, "a.out"); :}
         ;
 
 block ::= BEGIN stmt_list:sl END {: RESULT = sl; :}
@@ -67,7 +57,7 @@ stmt_list ::= stmt:s {: Stmt.ListStmt sl = Stmt.liststmt(new LinkedList<Stmt>())
 
 stmt ::= IDENTIFIER:id ASSIGN expr:e SEMI {: RESULT = Stmt.assign(Expr.ident(idxleft, id, idxright), e); :}
      |   READ IDENTIFIER:id SEMI {: RESULT = Stmt.read(Expr.ident(idxleft, id, idxright)); :}
-     |   WRITE expr:e SEMI {: System.out.println("write"); RESULT = Stmt.write(e); :}
+     |   WRITE expr:e SEMI {: RESULT = Stmt.write(e); :}
      |   IF expr:c THEN stmt:s {: RESULT = Stmt.ifthen(s, c); :}
      |   WHILE expr:c DO stmt:s {: RESULT = Stmt.whileloop(s, c); :}
      |   block:b {: RESULT = b; :}
