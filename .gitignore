@@ -1,2 +1,11 @@
 # ignore backup files ending with ~
 *~
+
+# ignore generated files
+*.class
+Lexer.java
+Parser.java
+ParserSym.java
+
+# ignore default compiled files
+*.out
