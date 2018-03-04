@@ -1,7 +1,7 @@
 # AVSL Compiler
 A compiler for A Very Simple Language 
 
-This compiler compile AVSL code to MIPS code. The code generated in file **a.out** by default, you can run MIPS code by using [Mars](http://courses.missouristate.edu/KenVollmar/mars/download.htm), a MIPS simulator.
+This compiler compile AVSL code to MIPS Assembly Language. The code generated in file **a.out** by default, you can run the generated code by using [Mars](http://courses.missouristate.edu/KenVollmar/mars/download.htm), a MIPS simulator.
 The compiler use [Jflex](http://www.jflex.de/) for generating lexer/scanner and [CUP](http://www2.cs.tum.edu/projects/cup/) for generating parser.
 
 First download jflex and CUP and follow their install instructions.
